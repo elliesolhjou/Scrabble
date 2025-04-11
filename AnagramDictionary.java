@@ -27,6 +27,9 @@ public class AnagramDictionary {
    private Map<String, ArrayList<String>> anagramMap;
    private Set<String> wordSet;
 
+   // creat empty constructor?
+
+   
    /**
    Create an anagram dictionary from the list of words given in the file
    indicated by fileName.  

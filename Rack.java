@@ -10,9 +10,19 @@ import java.util.ArrayList;
  */
 
 public class Rack {
-   
+   // Representation Invariant:
+   // - originalRack != null
+   // - originalRack contains only non-whitespace characters
+   // - originalRack may contain duplicate letters
+   // - originalRack is case-sensitive (but must match dictionary case)
+   private String inputRack;
 
-
+   public Rack(){
+      inputRack= "";
+   }
+   public Rack(String input){
+      inputRack = input;
+   }
 
    /**
       Finds all subsets of the multiset starting at position k in unique and mult.
@@ -29,7 +39,7 @@ public class Rack {
     */
    private static ArrayList<String> allSubsets(String unique, int[] mult, int k) {
       ArrayList<String> allCombos = new ArrayList<>();
-      
+
       if (k == unique.length()) {  // multiset is empty
          allCombos.add("");
          return allCombos;
