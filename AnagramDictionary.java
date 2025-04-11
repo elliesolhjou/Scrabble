@@ -28,6 +28,11 @@ public class AnagramDictionary {
    private Set<String> wordSet;
 
    // creat empty constructor?
+   //put constructor comment
+   public AnagramDictionary(){
+      anagramMap = new Map<String, ArrayList<String>>();
+      wordSet = new HashSet<String>();
+   }
 
    
    /**

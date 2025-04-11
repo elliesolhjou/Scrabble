@@ -64,5 +64,43 @@ public class Rack {
       return allCombos;
    }
 
+      /**
+      Generates all subsets of the rack represented by this Rack object.
+      This method processes the original rack string to compute the unique characters
+      and their multiplicities, then delegates to the recursive allSubsets helper method.
+
+      PRE: originalRack is not null and contains only valid characters (no whitespace).
+      
+      @return an ArrayList of all subsets of the rack, including the empty string.
+            Each subset is a String that may include repeated characters, and the
+            full list includes all possible combinations that can be formed from
+            the multiset of characters in the original rack.
+   */
+   public ArrayList<String> getSubsets(){
+      Map<Character, Integer> charFrequency = new TreeMap<>();
+      
+      // Count Freq of each character
+      for (int i = 0; i < inputRack.length(); i++){
+         char character = inputRack.charAt(i);
+         if (!charFrequency.containsKey(character)){
+            charFrequency.put(character, 1);
+         }
+         else{
+            charFrequency.put(character, charFrequency.get(character)+1);
+         }
+      }
+
+      // Building unique and corresponding mult[]
+      String unique = "";
+      int[] mult = new int[charFrequency.size()];
+      int index = 0;
+
+      for (Map.Entry<Character, Integer> entry: charFrequency.entrySet()){
+         unique += entry.getKey();
+         mult[index] = entry.getValue();
+         index++;
+      }
+      return allSubsets(unique, mult, 0);
+   } 
    
 }
