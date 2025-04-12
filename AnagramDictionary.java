@@ -30,7 +30,7 @@ public class AnagramDictionary {
    // creat empty constructor?
    //put constructor comment
    public AnagramDictionary(){
-      anagramMap = new Map<String, ArrayList<String>>();
+      anagramMap = new HashMap<String, ArrayList<String>>();
       wordSet = new HashSet<String>();
    }
 

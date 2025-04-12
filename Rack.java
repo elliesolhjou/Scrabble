@@ -4,6 +4,8 @@
 // Spring 2025
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
    A Rack of Scrabble tiles
