@@ -1,13 +1,11 @@
-// Name: 
-// USC NetID: 
+// Name: Fatemeh Ellie Solhjou
+// USC NetID: 1424729265
 // CS 455 PA4
 // Spring 2025
 
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
-
-
 
 /**
    A dictionary of all anagram sets. 
@@ -27,7 +25,6 @@ public class AnagramDictionary {
    private Map<String, ArrayList<String>> anagramMap;
    private Set<String> wordSet;
 
-   // creat empty constructor?
    //put constructor comment
    public AnagramDictionary(){
       anagramMap = new HashMap<String, ArrayList<String>>();
@@ -56,7 +53,7 @@ public class AnagramDictionary {
          }
          // Check for duplicates
          if (wordSet.contains(word)){
-            throw new IllegalDictionaryException("ERROR: Illegal dictionary: dictionary file has a duplicate word:" + word);
+            throw new IllegalDictionaryException("Illegal dictionary: dictionary file has a duplicate word:" + word);
          }
          wordSet.add(word);
 
@@ -73,9 +70,8 @@ public class AnagramDictionary {
          if(!anagramMap.containsKey(canonical)){
             ArrayList<String> keyList = new ArrayList<>();
             anagramMap.put(canonical, keyList);
-
-            anagramMap.get(canonical).add(word);
          }
+         anagramMap.get(canonical).add(word);
       }
       in.close();
    }

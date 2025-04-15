@@ -1,5 +1,5 @@
-// Name: 
-// USC NetID: 
+// Name: Fatemeh Ellie Solhjou
+// USC NetID: 1424729265
 // CS 455 PA4
 // Spring 2025
 
@@ -13,13 +13,13 @@ public class WordFinder{
     public static void main(String[] args){
 
         AnagramDictionary anagramDict;
-        Scanner in = new Scanner(System.in); 
-        System.out.println("Enter a dictionary file name: ");
-
-        String dictionaryFileName = in.nextLine().trim();
-        if (dictionaryFileName.equals("")){
-            dictionaryFileName = "sowpods.txt";
+       
+        String dictionaryFileName = "sowpods.txt";  
+       
+        if (args.length > 0) {
+            dictionaryFileName = args[0];  
         }
+
         try{
             anagramDict = new AnagramDictionary(dictionaryFileName);
         }
@@ -35,14 +35,18 @@ public class WordFinder{
         }
 
         ScoreTable scoreTable = new ScoreTable();
-
+        
+        Scanner in = new Scanner(System.in);
         System.out.println("Type . to quit.");
-        boolean done = false;
-        while(!done){
+        
+        while(true){
             System.out.print("Rack? ");
+            if (!in.hasNextLine()) {
+               break;
+            }
             String rackInput = in.nextLine().trim();
             if (rackInput.equals(".")){
-                System.exit(0);
+                break;
             }
             Rack rack = new Rack(rackInput);
             ArrayList<String> subsets = rack.getSubsets();
@@ -51,31 +55,34 @@ public class WordFinder{
             Set<String> seenWord = new HashSet<>();
             ArrayList<WordScore> wordList = new ArrayList<>();
             for (String subset : subsets){
-                ArrayList<String> anagram = anagramDict.getAnagramsOf(subset);
-                for (String word : anagram){
-                    if(!seenWord.contains(word)){
-                        seenWord.add(word);
-                        int score = scoreTable.getScore(word);
-                        wordList.add(new WordScore(word, score));
+                List<String> anagram = anagramDict.getAnagramsOf(subset);
+                if (anagram != null) {
+                    for (String word : anagram) {
+                        if (!seenWord.contains(word)) {
+                            seenWord.add(word);
+                            int score = scoreTable.getScore(word);
+                            wordList.add(new WordScore(word, score));
+                        }
                     }
                 }
+
             }
             // Sort list by score
             Collections.sort(wordList);
 
             
             System.out.println("We can make " + wordList.size() + " words from \"" + rackInput + "\"");
-            System.out.println("All of the words with their scores (sorted by score):");
-
+            if(wordList.size() != 0){
+               System.out.println("All of the words with their scores (sorted by score):");
+            }
             for (WordScore ws : wordList){
                 System.out.println(ws.getScore() + ": " + ws.getWord());
             }
 
-            done = true;
+            //done = true;
         }
 
 
-        in.close();
     }
 }
 
