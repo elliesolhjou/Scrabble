@@ -25,7 +25,11 @@ public class AnagramDictionary {
    private Map<String, ArrayList<String>> anagramMap;
    private Set<String> wordSet;
 
-   //put constructor comment
+   /**
+    * Constructs an empty AnagramDictionary with no words initially stored.
+    * Initializes the underlying map and set data structures used to store anagram groupings
+    * and to check for word uniqueness and validity.
+    */
    public AnagramDictionary(){
       anagramMap = new HashMap<String, ArrayList<String>>();
       wordSet = new HashSet<String>();

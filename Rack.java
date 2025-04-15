@@ -8,7 +8,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
-   A Rack of Scrabble tiles
+ * Represents a player's Scrabble tile rack as a multiset of characters.
+ * Provides functionality to compute all possible subsets (including repeated characters)
+ * that can be formed from the rack. These subsets are used to find all valid words
+ * a player can make during a Scrabble game.
+ * 
+ * This class encapsulates both the input and processing logic needed to 
+ * transform the tile rack into a structured frequency map and generate 
+ * combinations using a recursive subset generator.
+ * 
+ * The rack is case-sensitive and assumes all characters match the dictionary format.
  */
 
 public class Rack {
@@ -17,13 +26,25 @@ public class Rack {
    // - originalRack contains only non-whitespace characters
    // - originalRack may contain duplicate letters
    // - originalRack is case-sensitive (but must match dictionary case)
-   private String inputRack;
+   private String originalRack;
 
+   /**
+    * Constructs an empty Rack with no tiles.
+    * Initializes the originalRack to an empty string.
+    */
    public Rack(){
-      inputRack= "";
+      originalRack= "";
    }
+
+   /**
+    * Constructs a Rack with the specified tile letters.
+    * Stores the original rack string to be processed later.
+    * @param input the string of tiles entered for the rack.
+    * PRE: input != null and contains no whitespace characters.
+    */
    public Rack(String input){
-      inputRack = input;
+      originalRack = input;
+      assert isValid();
    }
 
    /**
@@ -66,7 +87,7 @@ public class Rack {
       return allCombos;
    }
 
-      /**
+   /**
       Generates all subsets of the rack represented by this Rack object.
       This method processes the original rack string to compute the unique characters
       and their multiplicities, then delegates to the recursive allSubsets helper method.
@@ -82,8 +103,8 @@ public class Rack {
       Map<Character, Integer> charFrequency = new TreeMap<>();
       
       // Count Freq of each character
-      for (int i = 0; i < inputRack.length(); i++){
-         char character = inputRack.charAt(i);
+      for (int i = 0; i < originalRack.length(); i++){
+         char character = originalRack.charAt(i);
          if (!charFrequency.containsKey(character)){
             charFrequency.put(character, 1);
          }
@@ -104,5 +125,20 @@ public class Rack {
       }
       return allSubsets(unique, mult, 0);
    } 
+   
+   /**
+    * Checks whether the Rack satisfies the representation invariant.
+    * @return true if originalRack is non-null and contains only non-whitespace characters
+    */
+   private static boolean isValid() {
+      assert isValid();
+      if (originalRack == null) return false;
+      for (int i = 0; i < originalRack.length(); i++) {
+         if (Character.isWhitespace(originalRack.charAt(i))) {
+            return false;
+         }
+      }
+      return true;
+   }
    
 }
