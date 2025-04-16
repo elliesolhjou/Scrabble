@@ -45,12 +45,13 @@ public class ScoreTable{
         addScores(5, "K");
         addScores(8, "JX");
         addScores(10, "QZ");
+
+        assert isValid();
     }
     
     /**
     * Helper method to map a group of letters to a score value.
     * Populates both uppercase and lowercase variants.
-    *
     * @param score the Scrabble point value to assign
     * @param letters a string of uppercase letters to assign that score to
     */
@@ -64,7 +65,6 @@ public class ScoreTable{
     /**
     * Computes the Scrabble score of the given word.
     * Ignores any characters that are not letters present in the score table.
-    *
     * @param word the word to compute the score for (case-insensitive)
     * @return the total score of the word based on individual letter values
     */
@@ -77,9 +77,29 @@ public class ScoreTable{
             if (charScoreMap.containsKey(ch)) {
                 total += charScoreMap.get(ch);
             }
-            // If the character isn't a letter (like @), skip it silently
+            // If the character isn't a letter (like @), skip it.
         }
 
         return total;
+    }
+    /**
+    * Checks whether the ScoreTable satisfies the representation invariant.
+    * @return true if charScoreMap is non-null and contains only valid Scrabble entries
+    */
+    private boolean isValid() {
+        if (charScoreMap == null) return false;
+
+        for (Map.Entry<Character, Integer> entry : charScoreMap.entrySet()) {
+            char c = entry.getKey();
+            int score = entry.getValue();
+
+            if (!Character.isLetter(c)) return false;
+            if (!(score == 1 || score == 2 || score == 3 || score == 4 ||
+                score == 5 || score == 8 || score == 10)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
