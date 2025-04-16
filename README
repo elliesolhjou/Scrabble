@@ -36,70 +36,58 @@ N/A
 ----------------------------------------------
 DESCRIPTION OF YOUR CLASS DESIGN AND ALGORITHMS AND DATA STRUCTURES USED: (see assgt description for more about this)
 
-Overall Approach
-This program uses the preprocessing (second) approach described in the assignment. Rather than comparing each dictionary word against the rack, it preprocesses the dictionary into a map of anagram groups keyed by a canonical form (i.e., a sorted version of each word). This allows for efficient lookup of valid words by using subsets of the rack as keys.
+## Design Description
 
-For each rack:
+### Approach
 
-All subsets of the rack are generated using the provided allSubsets recursive method.
+This program follows the **preprocessing-anagram-based approach** as required. Instead of iterating over the entire dictionary for each rack (which would be inefficient), the dictionary is processed once at the start and organized by the **canonical (sorted) form** of each word. This form acts as a key to group all its anagrams together using a `Map<String, ArrayList<String>>`. For example, both `"act"` and `"cat"` would be stored under the key `"act"`.
 
-Each subset is converted into canonical form and used to look up anagrams in the dictionary.
+When the user inputs a rack:
+1. We generate all possible **subsets of the multiset of letters** in the rack using a recursive method (provided in `Rack.java`).
+2. For each subset, we use the **canonical form** to look up matching anagrams in the preprocessed dictionary.
+3. All valid words found are collected, scored using Scrabble rules, and sorted by score (descending), with alphabetical ordering as a tiebreaker.
 
-Valid words are scored and stored in a list.
+This method reduces the time complexity per rack dramatically. The main cost is the O(n·2ⁿ) subset generation (n = number of unique characters), which is acceptable for small racks (≤ 7 tiles in typical use).
 
-The list is sorted by descending score, using alphabetical order to break ties.
+---
 
-This design trades initial dictionary setup time for improved performance when processing multiple racks.
+###  Class Design and Responsibilities
 
-Class Responsibilities and Data Structures
-WordFinder.java
-Contains the main() method, handles the command-line argument and user interaction.
+**1. `WordFinder.java`**
+- Contains the `main()` method.
+- Handles:
+  - Command-line argument parsing
+  - Dictionary file error checking
+  - Reading and processing user input
+  - Delegating logic to `Rack`, `AnagramDictionary`, and `ScoreTable`
 
-Delegates all core functionality to helper methods and other classes.
+**2. `AnagramDictionary.java`**
+- Stores dictionary words in a `Map<String, ArrayList<String>>`, mapping **canonical keys** (sorted letters) to anagram groups.
+- Provides:
+  - `getAnagramsOf(String s)` for retrieving valid words for a given subset
+- Ensures efficient lookups in **linear time** relative to the size of the output list.
 
-Modular methods include loadDictionary, runCommandLoop, and processRack.
+**3. `Rack.java`**
+- Encapsulates the user-provided rack of letters.
+- Provides a method to:
+  - Convert the rack into unique characters + multiplicities
+  - Call `allSubsets()` to generate all possible valid multiset subsets
+- Uses a **recursive backtracking** algorithm for subset generation (`allSubsets` is provided as a static helper).
 
-AnagramDictionary.java
-Stores all dictionary words organized by anagram groupings.
+**4. `ScoreTable.java`**
+- Stores Scrabble point values using a `Map<Character, Integer>` that supports both upper- and lowercase letters.
+- Provides:
+  - `getScore(String word)` to calculate the total score of a word
+- Encapsulates score logic cleanly for reuse.
 
-Uses a Map<String, ArrayList<String>> where keys are canonical sorted versions of words.
+**5. `IllegalDictionaryException.java`**
+- Custom exception for dictionary validation.
+- Thrown if:
+  - A duplicate word is detected during dictionary processing.
 
-A Set<String> is used to detect and prevent duplicates.
+---
 
-Provides fast anagram lookups via the getAnagramsOf(String) method.
-
-Rack.java
-Represents the Scrabble rack and manages subset generation.
-
-Converts the rack to a multiset using a TreeMap<Character, Integer> to maintain sorted order.
-
-Builds two parallel structures:
-
-A String of unique characters (unique)
-
-An int[] of multiplicities (mult)
-
-Passes these to allSubsets() to compute combinations.
-
-ScoreTable.java
-Maps each letter (case-insensitive) to its Scrabble point value using a Map<Character, Integer>.
-
-Populates the map using hardcoded Scrabble values for both uppercase and lowercase letters.
-
-Ignores non-alphabetic characters during scoring.
-
-Computes total word scores via the getScore(String word) method.
-
-WordScore (inner class in WordFinder.java)
-Encapsulates a word and its Scrabble score.
-
-Implements Comparable<WordScore> to allow sorting first by descending score, then alphabetically.
-
-IllegalDictionaryException.java
-A custom checked exception thrown when the dictionary contains duplicate words.
-
-Enforces dictionary integrity during initialization.
-
+###  Data Structures Summary
 Algorithm Summary
 Subset generation uses recursion based on the multiplicity of characters; time complexity is O(n × 2ⁿ) in the worst case (n = number of unique characters).
 
@@ -108,6 +96,17 @@ Dictionary lookup is efficient due to the use of a HashMap for constant-time acc
 Sorting the list of words is handled using Collections.sort(), which runs in O(n log n) time.
 
 This design provides a clear separation of concerns, makes effective use of Java Collections, and adheres closely to the object-oriented principles required by the assignment.
+
+| Structure | Used In | Purpose |
+|----------|---------|---------|
+| `Map<String, ArrayList<String>>` | `AnagramDictionary` | Lookup dictionary words by canonical form |
+| `ArrayList<String>` | `AnagramDictionary`, `WordFinder` | Stores groups of words or result lists |
+| `Map<Character, Integer>` | `ScoreTable` | Letter to score mapping |
+| `int[]` and `String` | `Rack` | Track multiplicities and unique letters |
+| Sorting via `Collections.sort()` | `WordFinder` | Order results by score and then lexicographically |
+
+
+
 
 
 
