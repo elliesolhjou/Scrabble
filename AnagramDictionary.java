@@ -14,14 +14,15 @@ import java.io.File;
    letters too, and likewise if the dictionary words are all upper case.
  */
 public class AnagramDictionary {
-   // Representation Invariant:
-   // - anagramMap != null
-   // - No null keys or values in anagramMap
-   // - All keys in anagramMap are sorted lowercase strings (canonical forms of words)
-   // - All values are non-empty ArrayLists of real dictionary words (2 or more characters)
-   // - wordSet != null
-   // - wordSet contains no duplicates and only words of length >= 2
-
+   /**
+    * Representation Invariant:
+    * - anagramMap != null
+    * - No null keys or values in anagramMap
+    * - All keys in anagramMap are sorted lowercase strings (canonical forms of words)
+    * - All values are non-empty ArrayLists of real dictionary words (2 or more characters)
+    * - wordSet != null
+    * - wordSet contains no duplicates and only words of length >= 2
+    */
    private Map<String, ArrayList<String>> anagramMap;
    private Set<String> wordSet;
 

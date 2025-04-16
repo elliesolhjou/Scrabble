@@ -6,14 +6,11 @@
 import java.util.*;
 
 /**
-
  * Encapsulates the logic for scoring words based on Scrabble letter values.
  * Supports both uppercase and lowercase letters. Non-letter characters are
  * silently ignored during scoring.
- *
  * This class is used by the WordFinder program to compute the score of
  * valid words generated from a Scrabble rack.
- *
  * Letter values:
  * - 1 point: A, E, I, O, U, L, N, S, T, R
  * - 2 points: D, G
@@ -22,13 +19,15 @@ import java.util.*;
  * - 5 points: K
  * - 8 points: J, X
  * - 10 points: Q, Z
-
  */
 public class ScoreTable{
-    // Representation Invariant:
-    // - charScoreMap != null
-    // - All keys in charScoreMap are single alphabetic characters (both cases)
-    // - All values are valid Scrabble point values (1, 2, 3, 4, 5, 8, 10)
+    /**
+    * Representation Invariant:
+    * - charScoreMap != null
+    * - All keys in charScoreMap are single alphabetic characters (both cases)
+    * - All values are valid Scrabble point values (1, 2, 3, 4, 5, 8, 10)
+    */
+
     private Map<Character, Integer> charScoreMap;
 
     /**
@@ -87,13 +86,16 @@ public class ScoreTable{
     * @return true if charScoreMap is non-null and contains only valid Scrabble entries
     */
     private boolean isValid() {
-        if (charScoreMap == null) return false;
-
+        if (charScoreMap == null){
+            return false;
+        }
         for (Map.Entry<Character, Integer> entry : charScoreMap.entrySet()) {
             char c = entry.getKey();
             int score = entry.getValue();
 
-            if (!Character.isLetter(c)) return false;
+            if (!Character.isLetter(c)){
+                return false;
+            } 
             if (!(score == 1 || score == 2 || score == 3 || score == 4 ||
                 score == 5 || score == 8 || score == 10)) {
                 return false;

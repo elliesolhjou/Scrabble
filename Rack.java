@@ -12,20 +12,21 @@ import java.util.TreeMap;
  * Provides functionality to compute all possible subsets (including repeated characters)
  * that can be formed from the rack. These subsets are used to find all valid words
  * a player can make during a Scrabble game.
- * 
  * This class encapsulates both the input and processing logic needed to 
  * transform the tile rack into a structured frequency map and generate 
  * combinations using a recursive subset generator.
- * 
  * The rack is case-sensitive and assumes all characters match the dictionary format.
  */
 
 public class Rack {
-   // Representation Invariant:
-   // - originalRack != null
-   // - originalRack contains only non-whitespace characters
-   // - originalRack may contain duplicate letters
-   // - originalRack is case-sensitive (but must match dictionary case)
+   /** 
+   * Representation Invariant:
+   * - originalRack != null
+   * - originalRack contains only non-whitespace characters
+   * - originalRack may contain duplicate letters
+   * - originalRack is case-sensitive (but must match dictionary case)
+   */
+
    private String originalRack;
 
    /**
@@ -88,16 +89,13 @@ public class Rack {
    }
 
    /**
-      Generates all subsets of the rack represented by this Rack object.
-      This method processes the original rack string to compute the unique characters
-      and their multiplicities, then delegates to the recursive allSubsets helper method.
-
-      PRE: originalRack is not null and contains only valid characters (no whitespace).
-      
+    * Generates all subsets of the rack represented by this Rack object.
+    * This method processes the original rack string to compute the unique characters
+      and their multiplicities, then delegates to the recursive allSubsets helper method.      
       @return an ArrayList of all subsets of the rack, including the empty string.
-            Each subset is a String that may include repeated characters, and the
-            full list includes all possible combinations that can be formed from
-            the multiset of characters in the original rack.
+    * Each subset is a String that may include repeated characters, and the
+      full list includes all possible combinations that can be formed from
+      the multiset of characters in the original rack.
    */
    public ArrayList<String> getSubsets(){
       Map<Character, Integer> charFrequency = new TreeMap<>();
@@ -132,7 +130,9 @@ public class Rack {
     */
    private boolean isValid() {
       assert isValid();
-      if (originalRack == null) return false;
+      if (originalRack == null){
+         return false;
+      } 
       for (int i = 0; i < originalRack.length(); i++) {
          if (Character.isWhitespace(originalRack.charAt(i))) {
             return false;
