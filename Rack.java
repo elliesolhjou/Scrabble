@@ -130,7 +130,7 @@ public class Rack {
     * Checks whether the Rack satisfies the representation invariant.
     * @return true if originalRack is non-null and contains only non-whitespace characters
     */
-   private static boolean isValid() {
+   private boolean isValid() {
       assert isValid();
       if (originalRack == null) return false;
       for (int i = 0; i < originalRack.length(); i++) {

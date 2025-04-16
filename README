@@ -15,7 +15,7 @@ of it with other students in the course."
 
 Initial below to "sign" the above statement:
 
-
+FS
 ----------------------------------------------
 ACKNOWLEDGE ANY OUTSIDE SOURCES
 
@@ -27,20 +27,94 @@ not need to list any of the code that we wrote for the assignment,
 i.e., the contents of the starter files for the assignment]
 
 
-
+FS
 ----------------------------------------------
 KNOWN BUGS or LIMITATIONS:
 
 
-
+N/A
 ----------------------------------------------
 DESCRIPTION OF YOUR CLASS DESIGN AND ALGORITHMS AND DATA STRUCTURES USED: (see assgt description for more about this)
+
+Overall Approach
+This program uses the preprocessing (second) approach described in the assignment. Rather than comparing each dictionary word against the rack, it preprocesses the dictionary into a map of anagram groups keyed by a canonical form (i.e., a sorted version of each word). This allows for efficient lookup of valid words by using subsets of the rack as keys.
+
+For each rack:
+
+All subsets of the rack are generated using the provided allSubsets recursive method.
+
+Each subset is converted into canonical form and used to look up anagrams in the dictionary.
+
+Valid words are scored and stored in a list.
+
+The list is sorted by descending score, using alphabetical order to break ties.
+
+This design trades initial dictionary setup time for improved performance when processing multiple racks.
+
+Class Responsibilities and Data Structures
+WordFinder.java
+Contains the main() method, handles the command-line argument and user interaction.
+
+Delegates all core functionality to helper methods and other classes.
+
+Modular methods include loadDictionary, runCommandLoop, and processRack.
+
+AnagramDictionary.java
+Stores all dictionary words organized by anagram groupings.
+
+Uses a Map<String, ArrayList<String>> where keys are canonical sorted versions of words.
+
+A Set<String> is used to detect and prevent duplicates.
+
+Provides fast anagram lookups via the getAnagramsOf(String) method.
+
+Rack.java
+Represents the Scrabble rack and manages subset generation.
+
+Converts the rack to a multiset using a TreeMap<Character, Integer> to maintain sorted order.
+
+Builds two parallel structures:
+
+A String of unique characters (unique)
+
+An int[] of multiplicities (mult)
+
+Passes these to allSubsets() to compute combinations.
+
+ScoreTable.java
+Maps each letter (case-insensitive) to its Scrabble point value using a Map<Character, Integer>.
+
+Populates the map using hardcoded Scrabble values for both uppercase and lowercase letters.
+
+Ignores non-alphabetic characters during scoring.
+
+Computes total word scores via the getScore(String word) method.
+
+WordScore (inner class in WordFinder.java)
+Encapsulates a word and its Scrabble score.
+
+Implements Comparable<WordScore> to allow sorting first by descending score, then alphabetically.
+
+IllegalDictionaryException.java
+A custom checked exception thrown when the dictionary contains duplicate words.
+
+Enforces dictionary integrity during initialization.
+
+Algorithm Summary
+Subset generation uses recursion based on the multiplicity of characters; time complexity is O(n × 2ⁿ) in the worst case (n = number of unique characters).
+
+Dictionary lookup is efficient due to the use of a HashMap for constant-time access on average.
+
+Sorting the list of words is handled using Collections.sort(), which runs in O(n log n) time.
+
+This design provides a clear separation of concerns, makes effective use of Java Collections, and adheres closely to the object-oriented principles required by the assignment.
 
 
 
 ----------------------------------------------
 ANY OTHER NOTES FOR THE GRADER:
 
+N/A
 
 
 

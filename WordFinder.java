@@ -1,5 +1,5 @@
 // Name: Fatemeh Ellie Solhjou
-// USC NetID: 1424729265
+// USC NetID: Solhjouk
 // CS 455 PA4
 // Spring 2025
 
@@ -128,18 +128,14 @@ public class WordFinder {
 }
 
 /**
- * WordScore class
- *
  * Stores a word and its corresponding Scrabble score.
  * Supports comparison by score in descending order and alphabetical order as a tiebreaker.
  * Used for sorting word results in the WordFinder program.
- *
- * Representation Invariant:
- * - word != null
- * - score >= 0
  */
 class WordScore implements Comparable<WordScore> {
-
+    // Representation Invariant:
+    // word != null
+    // score >= 0
     private String word;
     private int score;
 
