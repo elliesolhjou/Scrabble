@@ -1,0 +1,9 @@
+cat
+act
+tac
+listen
+silent
+enlist
+leer
+reel
+lere
