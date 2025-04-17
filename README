@@ -1,106 +1,96 @@
 Name: Fatemeh Ellie Solhjou
-USC NetID: 1424729265
+USC NetID: Solhjouk
 CS 455 PA4
 Spring 2025
 
-----------------------------------------------
+---
+
 CERTIFY IT'S YOUR WORK
 
 "I certify that the work submitted for this assignment does not
-violate USC's student conduct code.  In particular, the work is my
+violate USC's student conduct code. In particular, the work is my
 own, not a collaboration, and does not involve code created by other
 people or AI software, except for the the resources explicitly mentioned
-in the CS 455 Course Syllabus.  And I did not share my solution or part
+in the CS 455 Course Syllabus. And I did not share my solution or part
 of it with other students in the course."
 
 Initial below to "sign" the above statement:
 
-FS
-----------------------------------------------
+## FS
+
 ACKNOWLEDGE ANY OUTSIDE SOURCES
 
 List here any code you submitted for this assignment that was written
 with significant help of a course staff member, or code used from the
-textbook.  Be specific about what methods or algorithms are involved,
+textbook. Be specific about what methods or algorithms are involved,
 and what sections of the textbook are involved (if applicable): [you do
 not need to list any of the code that we wrote for the assignment,
 i.e., the contents of the starter files for the assignment]
 
+## FS
 
-FS
-----------------------------------------------
 KNOWN BUGS or LIMITATIONS:
 
+## N/A
 
-N/A
-----------------------------------------------
 DESCRIPTION OF YOUR CLASS DESIGN AND ALGORITHMS AND DATA STRUCTURES USED: (see assgt description for more about this)
 
-Overall Approach
-This program uses the preprocessing (second) approach described in the assignment. Rather than comparing each dictionary word against the rack, it preprocesses the dictionary into a map of anagram groups keyed by a canonical form (i.e., a sorted version of each word). This allows for efficient lookup of valid words by using subsets of the rack as keys.
+## Design Description
 
-For each rack:
+### Approach
 
-All subsets of the rack are generated using the provided allSubsets recursive method.
+This program follows the **preprocessing-anagram-based approach** as required. Instead of iterating over the entire dictionary for each rack (which would be inefficient), the dictionary is processed once at the start and organized by the **canonical (sorted) form** of each word. This form acts as a key to group all its anagrams together using a `Map<String, ArrayList<String>>`. For example, both `"act"` and `"cat"` would be stored under the key `"act"`.
 
-Each subset is converted into canonical form and used to look up anagrams in the dictionary.
+When the user inputs a rack:
 
-Valid words are scored and stored in a list.
+1. We generate all possible **subsets of the multiset of letters** in the rack using a recursive method (provided in `Rack.java`).
+2. For each subset, we use the **canonical form** to look up matching anagrams in the preprocessed dictionary.
+3. All valid words found are collected, scored using Scrabble rules, and sorted by score (descending), with alphabetical ordering as a tiebreaker.
 
-The list is sorted by descending score, using alphabetical order to break ties.
+This method reduces the time complexity per rack dramatically. The main cost is the O(n·2ⁿ) subset generation (n = number of unique characters), which is acceptable for small racks (≤ 7 tiles in typical use).
 
-This design trades initial dictionary setup time for improved performance when processing multiple racks.
+### Class Design and Responsibilities
 
-Class Responsibilities and Data Structures
-WordFinder.java
-Contains the main() method, handles the command-line argument and user interaction.
+**1. `WordFinder.java`**
 
-Delegates all core functionality to helper methods and other classes.
+- Contains the `main()` method.
+- Handles:
+  - Command-line argument parsing
+  - Dictionary file error checking
+  - Reading and processing user input
+  - Delegating logic to `Rack`, `AnagramDictionary`, and `ScoreTable`
 
-Modular methods include loadDictionary, runCommandLoop, and processRack.
+**2. `AnagramDictionary.java`**
 
-AnagramDictionary.java
-Stores all dictionary words organized by anagram groupings.
+- Stores dictionary words in a `Map<String, ArrayList<String>>`, mapping **canonical keys** (sorted letters) to anagram groups.
+- Provides:
+  - `getAnagramsOf(String s)` for retrieving valid words for a given subset
+- Ensures efficient lookups in **linear time** relative to the size of the output list.
 
-Uses a Map<String, ArrayList<String>> where keys are canonical sorted versions of words.
+**3. `Rack.java`**
 
-A Set<String> is used to detect and prevent duplicates.
+- Encapsulates the user-provided rack of letters.
+- Provides a method `getSubsets()` to:
+  - Convert the rack into unique characters + multiplicities
+  - Call `allSubsets()` to generate all possible valid multiset subsets 
+- Uses a **recursive backtracking** algorithm for subset generation (`allSubsets` is provided as a static helper).
 
-Provides fast anagram lookups via the getAnagramsOf(String) method.
+**4. `ScoreTable.java`**
 
-Rack.java
-Represents the Scrabble rack and manages subset generation.
+- Stores Scrabble point values using a `Map<Character, Integer>` that supports both upper- and lowercase letters.
+- Provides:
+  - `getScore(String word)` to calculate the total score of a word
+- Encapsulates score logic cleanly for reuse.
 
-Converts the rack to a multiset using a TreeMap<Character, Integer> to maintain sorted order.
+**5. `IllegalDictionaryException.java`**
 
-Builds two parallel structures:
+- Custom exception for dictionary validation.
+- Thrown if:
+- A duplicate word is detected during dictionary processing.
 
-A String of unique characters (unique)
 
-An int[] of multiplicities (mult)
+### Data Structures Summary
 
-Passes these to allSubsets() to compute combinations.
-
-ScoreTable.java
-Maps each letter (case-insensitive) to its Scrabble point value using a Map<Character, Integer>.
-
-Populates the map using hardcoded Scrabble values for both uppercase and lowercase letters.
-
-Ignores non-alphabetic characters during scoring.
-
-Computes total word scores via the getScore(String word) method.
-
-WordScore (inner class in WordFinder.java)
-Encapsulates a word and its Scrabble score.
-
-Implements Comparable<WordScore> to allow sorting first by descending score, then alphabetically.
-
-IllegalDictionaryException.java
-A custom checked exception thrown when the dictionary contains duplicate words.
-
-Enforces dictionary integrity during initialization.
-
-Algorithm Summary
 Subset generation uses recursion based on the multiplicity of characters; time complexity is O(n × 2ⁿ) in the worst case (n = number of unique characters).
 
 Dictionary lookup is efficient due to the use of a HashMap for constant-time access on average.
@@ -109,15 +99,43 @@ Sorting the list of words is handled using Collections.sort(), which runs in O(n
 
 This design provides a clear separation of concerns, makes effective use of Java Collections, and adheres closely to the object-oriented principles required by the assignment.
 
+Map<String, ArrayList<String>> — used in AnagramDictionary to look up dictionary words by their canonical (sorted) form.
 
+ArrayList<String> — used in both AnagramDictionary and WordFinder to store groups of anagram words and final result lists.
 
-----------------------------------------------
+Map<Character, Integer> — used in ScoreTable to map each letter to its Scrabble score, handling both uppercase and lowercase characters.
+
+int[] and String — used in Rack to represent the rack's unique characters and their multiplicities, for generating all valid subsets.
+
+Sorting with Collections.sort() — used in WordFinder to sort the final word list by descending score and alphabetical order for ties.
+
+### Additional Class Used: WordScore
+
+To assist with sorting and displaying valid dictionary words along with their Scrabble scores, I implemented an additional class called WordScore.
+
+This class is implemented in the WordFinder.java file.
+
+Purpose and Responsibilities:
+WordScore encapsulates a single word and its corresponding Scrabble score. It implements the Comparable<WordScore> interface to support custom sorting logic. The class is used in the WordFinder class to store and manage the results for each rack.
+
+*** Design Details:**
+
+Contains two private instance variables: String word and int score.
+
+Provides getter methods: getWord() and getScore() to access those values.
+
+Overrides compareTo() to sort WordScore objects:
+
+First by score in descending order.
+
+Then alphabetically by the word to break ties.
+
+This sorting behavior ensures that the output adheres to the project requirements for displaying the results in order of score, and alphabetically for ties.
+
+In the WordFinder class, once all valid anagram words are found and scored using the ScoreTable, they are wrapped in WordScore objects. These objects are stored in a list and sorted using Collections.sort(), leveraging the compareTo() implementation in WordScore to produce the correct output order.
+
+---
+
 ANY OTHER NOTES FOR THE GRADER:
 
-N/A
-
-
-
-
-
-
+JavaDoc comments and Representation Invariants follow the indentation and formatting conventions provided by the instructor, consistent with this assignment and previous homework submissions.

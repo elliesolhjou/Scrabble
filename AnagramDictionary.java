@@ -1,5 +1,5 @@
 // Name: Fatemeh Ellie Solhjou
-// USC NetID: 1424729265
+// USC NetID: Solhjouk
 // CS 455 PA4
 // Spring 2025
 
@@ -14,21 +14,22 @@ import java.io.File;
    letters too, and likewise if the dictionary words are all upper case.
  */
 public class AnagramDictionary {
-   // Representation Invariant:
-   // - anagramMap != null
-   // - No null keys or values in anagramMap
-   // - All keys in anagramMap are sorted lowercase strings (canonical forms of words)
-   // - All values are non-empty ArrayLists of real dictionary words (2 or more characters)
-   // - wordSet != null
-   // - wordSet contains no duplicates and only words of length >= 2
-
+   /**
+      Representation Invariant:
+      - anagramMap != null
+      - No null keys or values in anagramMap
+      - All keys in anagramMap are sorted lowercase strings (canonical forms of words)
+      - All values are non-empty ArrayLists of real dictionary words (2 or more characters)
+      - wordSet != null
+      - wordSet contains no duplicates and only words of length >= 2
+    */
    private Map<String, ArrayList<String>> anagramMap;
    private Set<String> wordSet;
 
    /**
-    * Constructs an empty AnagramDictionary with no words initially stored.
-    * Initializes the underlying map and set data structures used to store anagram groupings
-    * and to check for word uniqueness and validity.
+      Constructs an empty AnagramDictionary with no words initially stored.
+      Initializes the underlying map and set data structures used to store anagram groupings
+      and to check for word uniqueness and validity.
     */
    public AnagramDictionary(){
       anagramMap = new HashMap<String, ArrayList<String>>();
@@ -37,11 +38,12 @@ public class AnagramDictionary {
 
    
    /**
-   Create an anagram dictionary from the list of words given in the file
-   indicated by fileName.  
-   @param fileName  the name of the file to read from
-   @throws FileNotFoundException  if the file is not found
-   @throws IllegalDictionaryException  if the dictionary has any duplicate words
+      Create an anagram dictionary from the list of words given in the file
+      indicated by fileName.  
+      @param fileName  the name of the file to read from
+      @throws FileNotFoundException  if the file is not found
+      @throws IllegalDictionaryException  if the dictionary has any duplicate words
+      PRE: fileName != null
    */
    public AnagramDictionary(String fileName) throws FileNotFoundException, IllegalDictionaryException{
       anagramMap = new HashMap<>();
@@ -85,6 +87,7 @@ public class AnagramDictionary {
       Get all anagrams of the given string. This method is case-sensitive.
       E.g. "CARE" and "race" would not be recognized as anagrams.
       @param s string to process
+      PRE: string != null
       @return a list of the anagrams of s
     */
    public ArrayList<String> getAnagramsOf(String string) {

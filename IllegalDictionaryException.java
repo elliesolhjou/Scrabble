@@ -6,7 +6,7 @@
 import java.io.IOException;
 
 /**
-   This class reports problems with the dictionary file.
+ * This class reports problems with the dictionary file.
  */
 public class IllegalDictionaryException extends IOException {
    public IllegalDictionaryException() {}
